@@ -1,7 +1,7 @@
 #Difference Tests
 library(shiny)
 library(shinydashboard)
-
+library(shinyBS)
 
 dashboardPage(skin="blue",
               
@@ -38,10 +38,39 @@ dashboardPage(skin="blue",
                             sidebarLayout(
                               sidebarPanel(
                                 "Information",
-                                actionButton(inputId = "more","Generate new customers")
+                                actionButton(inputId = "more","Generate more")
                               ),
                               mainPanel(
-                                uiOutput("table1")
+                                fluidRow(
+                                  column(4,
+                                         bsButton("tab2",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab3",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab4",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab5",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab6",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab7",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab8",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                         ),
+                                  column(4,
+                                         bsButton("tab9",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab10",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab11",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab12",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab13",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab14",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab15",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                         ),
+                                  column(4,
+                                         bsButton("tab16",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab17",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab18",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab19",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab20",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab21",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
+                                         bsButton("tab22",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                         )
+                                )
+                                #uiOutput("table1")
                               )
                             )
                           )

@@ -33,6 +33,20 @@ dashboardPage(skin="blue",
                             )
                           )
                   ),
+                  tabItem(tabName = "second",
+                          fluidPage(
+                            sidebarLayout(
+                              sidebarPanel(
+                                "Information",
+                                actionButton(inputId = "more","Generate new customers")
+                              ),
+                              mainPanel(
+                                uiOutput("table1")
+                              )
+                            )
+                          )
+                  ),
+                  
                   # tabItem(tabName = "second",
                   #         fluidRow(
                   #           withMathJax(),
@@ -67,8 +81,8 @@ dashboardPage(skin="blue",
                             column(6,
                                    box(width =12,background = "blue",
                                        "A study published in the Journal of Applied Social Psychology claims that giving mints to customers can increase a waiters tip by about 23%",
-                                       br(),br(),
-                                       img(src="CandyExperiment.png",height = 125,width =250,algin = "middle"),
+                                       #br(),br(),
+                                       #img(src="CandyExperiment.png",height = 125,width =250,algin = "middle"),
                                        br(),br(),
                                        "Researchers want to replicate this experiment to see if the results are accurate",
                                        br(),br(),

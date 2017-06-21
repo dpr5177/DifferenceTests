@@ -257,7 +257,7 @@ output$avg1 <-renderText({
   average2 = average2/sum2
   average1 = average1/sum1
   #paste("The average is ", average, "and a the value of the 24th is ", val$tabtip[25], "and the sum I am getting is ", val3$calc1, "The another value is ", val$tab[10])
-  paste("The average for the candy tables is  ", average1,"The average for the non candy table is", average2 )
+  paste("The average for the candy tables is  ", round(average1,3),"The average for the non candy table is", round(average2,3) )
 })
 output$effect <-renderText({
   sum1 = n1()
@@ -290,9 +290,9 @@ output$z <-renderText({
     }
   }
   average2 = 0
-  for(g in 2:25){
-    if(val$tab[g]==0){
-      average2 = average2 + val$tabtip[g]
+  for(f in 2:25){
+    if(val$tab[f]==0){
+      average2 = average2 + val$tabtip[f]
     }
   }
   sum2 = 24-sum1
@@ -300,10 +300,30 @@ output$z <-renderText({
   average1 = average1/sum1
   diff1 = average1 -average2
   
+  sigma1 = 0
+  for(c in 2:25){
+    if(val$tab[c]==1){
+      newestVal = val$tabtip[c] - average1
+      newestVal = abs(newestVal)
+      sigma1 = sigma1 + newestVal
+    }
+  }
+  sigma1 = sigma1/sum1
+  
+  sigma2 = 0
+  for(d in 2:25){
+    if(val$tab[d]==1){
+      newestVal1 = val$tabtip[d] - average1
+      newestVal1 = abs(newestVal1)
+      sigma2 = sigma2 + newestVal1
+    }
+  }
+  sigma2 = sigma2/sum2
+  
   se1 = sqrt(((sigma1^2)/sum1)+((sigma2^2)/sum2))
   z = diff1/se1
-  
-  paste("The z value is ", z)
+  pvalue = 2*pnorm(z,lower.tail = FALSE)
+  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", pvalue)
 })
 
 output$values <- renderText({

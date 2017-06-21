@@ -156,7 +156,8 @@ dashboardPage(skin="blue",
                                          checkboxInput(inputId = "showTest", "Show the test values"),
                                          conditionalPanel("input.showTest == true",
                                                           textOutput("avg1"),br(),br(),
-                                                          textOutput("effect")
+                                                          textOutput("effect"),br(),br(),
+                                                          textOutput("z")
                                          )
                                          ),
                                   column(4,

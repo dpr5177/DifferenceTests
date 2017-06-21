@@ -51,6 +51,7 @@ dashboardPage(skin="blue",
                                 textOutput("n2text"),
                                 numericInput(inputId = "tabtip27","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
                                 numericInput(inputId = "tabtip28","Enter the average tip % for the tip with candy", value = 20, step = 0.5),
+                                uiOutput("table1"),
                                 useShinyjs(),
                                 extendShinyjs(text = jsResetCode),
                                 #Use jscode to disable all the buttons
@@ -165,7 +166,7 @@ dashboardPage(skin="blue",
                                          )
                                   
                                 )
-                                #uiOutput("table1")
+                                
                               )
                             )
                           )

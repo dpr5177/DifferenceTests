@@ -38,33 +38,33 @@ t2 <- reactive({
 })
 
 #Initial way of changing the color
-# global <- reactiveValues(clicked = FALSE)
-# 
-# observe({
-#   if(length(input$tab1)){
-#     if(input$tab1) global$clicked <- TRUE
-#   } 
-# })
-# 
-# output$table1 <- renderUI({
-#   if(!is.null(input$tab1) & global$clicked){
-#     actionButton(inputId= "tab1", label = "", 
-#                  style = "color: white; 
-#                   background-color: #1C2C5B;
-#                   height: 35px;
-#                   width: 35px;
-#                  "
-#                  )
-#   }
-#   else{
-#     actionButton(inputId = "tab1",label = "",
-#                  style = "
-#                   height: 35px;
-#                   width: 35px;
-#                  "
-#                  )
-#   }
-# })
+global <- reactiveValues(clicked = FALSE)
+
+observe({
+  if(length(input$tab1)){
+    if(input$tab1) global$clicked <- TRUE
+  }
+})
+
+output$table1 <- renderUI({
+  if(!is.null(input$tab1) & global$clicked){
+    actionButton(inputId= "tab1", label = "",
+                 style = "color: white;
+                  background-color: #1C2C5B;
+                  height: 35px;
+                  width: 35px;
+                 "
+                 )
+  }
+  else{
+    actionButton(inputId = "tab1",label = "",
+                 style = "
+                  height: 35px;
+                  width: 35px;
+                 "
+                 )
+  }
+})
 
 #for the numeric input of tips
 val1 <- reactiveValues(tabtip = c())
@@ -161,9 +161,10 @@ observeEvent(val$tab,({
   if(val$tab[26] == 1){
     for(j in 2:25){
       if(j %in% nums){
-        updateButton(session,paste("tab",j,sep = ""), style = "color: white;
-                   background-color: #1C2C5B;", disabled = TRUE)
+         updateButton(session,paste("tab",j,sep = ""), style = "color: white;
+                    background-color: #1C2C5B;", disabled = TRUE)
         val2$sum3 = val2$sum3 + 1
+        
       }
     }
   }
@@ -175,19 +176,12 @@ observeEvent(val$tab,({
       }
     }
   }
+
+  #disable from clicking
+  for (q in 2:25){
+    disableActionButton(paste("tab",q,sep = ""),session)
+  }
   
-  #to calc avg1
-  for(t in 2:25){
-    if(t %in% nums){
-      val3$calc1 = val3$calc1 + val$tabtip[t]
-    }
-  }
-  #disable from clicking more if they did random
-  if(val$tab[26] == 1){
-    for (q in 2:25){
-      disableActionButton(paste("tab",q,sep = ""),session)
-    }
-  }
   
   #for tip values
   if (val$tab[26] == 1){
@@ -206,6 +200,13 @@ observeEvent(val$tab,({
         newVal = round(newVal,2)
         updateNumericInput(session,paste("tabtip",l,sep = ""),value = newVal)
       }
+    }
+  }
+  
+  #to calc avg1
+  for(t in 2:25){
+    if(t %in% nums){
+      val3$calc1 = val3$calc1 + val$tabtip[t]
     }
   }
   
@@ -240,13 +241,13 @@ output$n2text <-renderText({
 #Text output for the average values
 output$avg1 <-renderText({
   sum1 = n1()
-  #average = val3$calc1
-  average1 = 0
-  for(g in 2:25){
-    if(val$tab[g]==1){
-      average1 = average1 + val$tabtip[g]
-    }
-  }
+  average1 = val3$calc1
+  #average1 = 0
+  # for(g in 2:25){
+  #   if(val$tab[g]==1){
+  #     average1 = average1 + val$tabtip[g]
+  #   }
+  # }
   average2 = 0
   for(g in 2:25){
     if(val$tab[g]==0){
@@ -353,7 +354,7 @@ output$z <-renderText({
   pvalue2 = pt(t1,DF,lower.tail = FALSE)
   
   pvalue = 2*pnorm(z,lower.tail = FALSE)
-  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", round(pvalue,3), "and the DF is ", round(DF,4), "and the actual pvalue is", round(pvalue2,3), "and the pooled SD is ", sigma3 )
+  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", round(pvalue,3), "and the DF is ", round(DF,4), "and the actual pvalue is", round(pvalue2,3), "and the pooled SD is ", round(sigma3,3) )
 })
 
 output$values <- renderText({

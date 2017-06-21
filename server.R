@@ -59,6 +59,8 @@ t2 <- reactive({
 #                  )
 #   }
 # })
+
+#for the numeric input of tips
 val1 <- reactiveValues(tabtip = c())
 observe({
   val$tabtip[2] = input$tabtip2
@@ -115,6 +117,8 @@ observe({
   val$tab[25] = input$tab25
   val$tab[26] = input$tab26
 })
+#for the n's
+val2 <- reactiveValues(sum3 = 0 )
 
 # observeEvent(val$tab,({
 #   ra = random()
@@ -145,15 +149,19 @@ observeEvent(val$tab,({
       if(j %in% nums){
         updateButton(session,paste("tab",j,sep = ""), style = "color: white;
                    background-color: #1C2C5B;", disabled = TRUE)
+        val2$sum3 = val2$sum3 + 1
       }
     }
   }
-  for (i in 2:25){
-    if (val$tab[i] == 1){
-      updateButton(session,paste("tab",i,sep = ""), style = "color: white;
+  else{
+    for (i in 2:25){
+      if (val$tab[i] == 1){
+        updateButton(session,paste("tab",i,sep = ""), style = "color: white;
                    background-color: #1C2C5B;", disabled = TRUE)
+      }
     }
   }
+
   #for tip values
   if (val$tab[26] == 1){
     for(k in 2:25){
@@ -179,9 +187,14 @@ observeEvent(val$tab,({
 #Reactive for the n1 and n2
 n1 <- reactive({
   sum1 = 0
-  for(i in 2:25){
-    if(val$tab[i]==1){
-      sum1 = sum1 + 1
+  if(val$tab[26] == 1){
+    sum1 = val2$sum3
+  }
+  else{
+    for(i in 2:25){
+      if(val$tab[i]==1){
+        sum1 = sum1 + 1
+      }
     }
   }
   return(sum1)
@@ -196,6 +209,7 @@ output$n2text <-renderText({
   sum2 = 24 -sum1
   paste("n2 = ", sum2 )
 })
+
 
 
 

@@ -44,7 +44,7 @@ dashboardPage(skin="blue",
                                 br(),br(),
                                 "See if you can replicate this experiment",
                                 br(),br(),
-                                "Individually select or randomly assign which tables you would like to give candy to.",br(),
+                                "Individually select or randomly assign which tables you would like the waiter to give candy and what percent the waiter will receive as a tip.",br(),
                                 bsButton("tab26",label = "Randomly Assign"),br(),
                                 actionButton(inputId = "more","Generate more"),br(),
                                 textOutput("n1text"),
@@ -144,10 +144,18 @@ dashboardPage(skin="blue",
                                 ),
                                 fluidRow(
                                   column(4,
-                                         checkboxInput(inputId = "show.hyp","Show the test hypotheses")
+                                         checkboxInput(inputId = "showHyp","Show the test hypotheses"),
+                                         conditionalPanel("input.showHyp == true",
+                                                          "H0: giving a mint does not affect the tip percentage (No candy tip = Candy tip)",
+                                                          br(),br(),
+                                                          "H1: giving a mint does affect the tip percentage (No candy tip not equal to Candy tip)"
+                                         )
                                          ),
                                   column(4,
-                                         checkboxInput(inputId = "show.test", "Show the test values")
+                                         checkboxInput(inputId = "showTest", "Show the test values"),
+                                         conditionalPanel("input.showTest == true",
+                                                          "words"
+                                         )
                                          ),
                                   column(4,
                                          ""

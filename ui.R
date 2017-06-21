@@ -2,6 +2,9 @@
 library(shiny)
 library(shinydashboard)
 library(shinyBS)
+library(shinyjs)
+
+jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
 
 dashboardPage(skin="blue",
               
@@ -13,7 +16,7 @@ dashboardPage(skin="blue",
                 width = 260,
                 sidebarMenu(
                   
-                  menuItem("Overview", tabName = "over", icon = icon("university")),
+                  #menuItem("Overview", tabName = "over", icon = icon("university")),
                   menuItem("Part 1", tabName = "second", icon = icon("pencil-square")),
                   menuItem("Part 2", tabName = "third", icon = icon("pencil-square"))
                 )),
@@ -37,38 +40,119 @@ dashboardPage(skin="blue",
                           fluidPage(
                             sidebarLayout(
                               sidebarPanel(
-                                "Information",
-                                actionButton(inputId = "more","Generate more")
+                                "A study published in the Journal of Applied Social Psychology claims that giving candy to customers can increase a waiters tip by about 23%",
+                                br(),br(),
+                                "See if you can replicate this experiment",
+                                br(),br(),
+                                "Individually select or randomly assign which tables you would like to give candy to.",br(),
+                                bsButton("tab26",label = "Randomly Assign"),br(),
+                                actionButton(inputId = "more","Generate more"),br(),
+                                textOutput("n1text"),
+                                textOutput("n2text"),
+                                numericInput(inputId = "tip1","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
+                                numericInput(inputId = "tip2","Enter the average tip % for the tip with candy", value = 20, step = 0.5),
+                                useShinyjs(),
+                                extendShinyjs(text = jsResetCode),
+                                #Use jscode to disable all the buttons
+                                tags$head(tags$script(HTML('
+                                                           Shiny.addCustomMessageHandler("jsCode",
+                                                           function(message) {
+                                                           console.log(message)
+                                                           eval(message.code);
+                                                           }
+                                                           );
+                                                           '))),
+                                actionButton("reset_button", "Reset")
                               ),
                               mainPanel(
                                 fluidRow(
-                                  column(4,
-                                         bsButton("tab2",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab3",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab4",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab5",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab6",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab7",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab8",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                  column(3,
+                                         bsButton("tab2",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip2",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         bsButton("tab3",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip3",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab4",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip4",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab5",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip5",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab6",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip6",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab7",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip7",label = NULL, val = 20, width = '72px',step = 0.5)
                                          ),
-                                  column(4,
-                                         bsButton("tab9",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab10",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab11",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab12",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab13",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab14",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab15",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                  column(3,
+                                         bsButton("tab8",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip8",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab9",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip9",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab10",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip10",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab11",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip11",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab12",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip12",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab13",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip13",label = NULL, val = 20, width = '72px',step = 0.5)
                                          ),
-                                  column(4,
-                                         bsButton("tab16",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab17",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab18",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab19",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab20",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab21",label = tags$img(src = 'dinTable.jpg',width = 45)),br(),br(),
-                                         bsButton("tab22",label = tags$img(src = 'dinTable.jpg',width = 45))
+                                  column(3,
+                                         bsButton("tab14",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip14",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab15",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip15",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab16",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip16",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab17",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip17",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab18",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip18",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab19",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip19",label = NULL, val = 20, width = '72px',step = 0.5)
+                                         ),
+                                  column(3,
+                                         bsButton("tab20",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip20",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab21",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip21",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab22",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip22",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab23",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip23",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab24",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip24",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
+                                         bsButton("tab25",label = tags$img(src = 'restTable.png',width = 45)),
+                                         numericInput(inputId = "tabtip25",label = NULL, val = 20, width = '72px',step = 0.5)
                                          )
+                                ),
+                                fluidRow(
+                                  column(4,
+                                         checkboxInput(inputId = "show.hyp","Show the test hypotheses")
+                                         ),
+                                  column(4,
+                                         checkboxInput(inputId = "show.test", "Show the test values")
+                                         ),
+                                  column(4,
+                                         ""
+                                         )
+                                  
                                 )
                                 #uiOutput("table1")
                               )

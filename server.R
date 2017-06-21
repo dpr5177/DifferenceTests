@@ -1,6 +1,9 @@
 #Difference Tests
-
+library(shinyjs)
 library(shiny)
+library(shinyBS)
+
+jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -11,39 +14,80 @@ es <- reactive({
 })
 
 #Reactive for the sample size that the user selects
-n1 <- reactive({
+n12 <- reactive({
   return(input$samp.size)
 })
 
+#Reactive for if random assignment
+random <-reactive({
+  return(input$rand)
+})
+
+#Reactive for the tips
+t1 <- reactive({
+  return(input$tip1)
+})
+t2 <- reactive({
+  return(input$tip2)
+})
+
 #Initial way of changing the color
-global <- reactiveValues(clicked = FALSE)
-
+# global <- reactiveValues(clicked = FALSE)
+# 
+# observe({
+#   if(length(input$tab1)){
+#     if(input$tab1) global$clicked <- TRUE
+#   } 
+# })
+# 
+# output$table1 <- renderUI({
+#   if(!is.null(input$tab1) & global$clicked){
+#     actionButton(inputId= "tab1", label = "", 
+#                  style = "color: white; 
+#                   background-color: #1C2C5B;
+#                   height: 35px;
+#                   width: 35px;
+#                  "
+#                  )
+#   }
+#   else{
+#     actionButton(inputId = "tab1",label = "",
+#                  style = "
+#                   height: 35px;
+#                   width: 35px;
+#                  "
+#                  )
+#   }
+# })
+val1 <- reactiveValues(tabtip = c())
 observe({
-  if(length(input$tab1)){
-    if(input$tab1) global$clicked <- TRUE
-  } 
+  val$tabtip[2] = input$tabtip2
+  val$tabtip[3] = input$tabtip3
+  val$tabtip[4] = input$tabtip4
+  val$tabtip[5] = input$tabtip5
+  val$tabtip[6] = input$tabtip6
+  val$tabtip[7] = input$tabtip7
+  val$tabtip[8] = input$tabtip8
+  val$tabtip[9] = input$tabtip9
+  val$tabtip[10] = input$tabtip10
+  val$tabtip[11] = input$tabtip11
+  val$tabtip[12] = input$tabtip12
+  val$tabtip[13] = input$tabtip13
+  val$tabtip[14] = input$tabtip14
+  val$tabtip[15] = input$tabtip15
+  val$tabtip[16] = input$tabtip16
+  val$tabtip[17] = input$tabtip17
+  val$tabtip[18] = input$tabtip18
+  val$tabtip[19] = input$tabtip19
+  val$tabtip[20] = input$tabtip20
+  val$tabtip[21] = input$tabtip21
+  val$tabtip[22] = input$tabtip22
+  val$tabtip[23] = input$tabtip23
+  val$tabtip[24] = input$tabtip24
+  val$tabtip[25] = input$tabtip25
 })
-
-output$table1 <- renderUI({
-  if(!is.null(input$tab1) & global$clicked){
-    actionButton(inputId= "tab1", label = "", 
-                 style = "color: white; 
-                  background-color: #1C2C5B;
-                  height: 35px;
-                  width: 35px;
-                 "
-                 )
-  }
-  else{
-    actionButton(inputId = "tab1",label = "",
-                 style = "
-                  height: 35px;
-                  width: 35px;
-                 "
-                 )
-  }
-})
-val <- reactiveValues(btn = c())
+#Part of the other way
+val <- reactiveValues(tab = c())
 observe({
   val$tab[2] = input$tab2
   val$tab[3] = input$tab3
@@ -66,20 +110,98 @@ observe({
   val$tab[20] = input$tab20
   val$tab[21] = input$tab21
   val$tab[22] = input$tab22
+  val$tab[23] = input$tab23
+  val$tab[24] = input$tab24
+  val$tab[25] = input$tab25
+  val$tab[26] = input$tab26
 })
-#The other way of chaning the oclor
+
+# observeEvent(val$tab,({
+#   ra = random()
+#   nums = sample(2:25, 12)
+#   if (val$tab[26] == 1){
+#     for(j in 2:25){
+#       if(j %in% nums){
+#         updateNumericInput(session,paste("tabtip",2,sep = ""),value = 10)
+#       }
+#     }
+#   }
+# }))
+observeEvent(input$reset_button, {js$reset()}) 
+
+#The other way of chaning the color
+
+#Adding the part for random assignment
 observeEvent(val$tab,({
-  for (i in 2:22){
-    if (val$tab[i] == 1){
-      updateButton(session,paste("tab",i,sep = ""), style = "color: #1C2C5B;
-                      background-color: #1C2C5B;", disabled = TRUE)
+  ra = random()
+  nums = sample(2:25, 12)
+  if (val$tab[26] == 1){
+    updateButton(session,paste("tab",26,sep = ""), style = "color: white;
+                   background-color: #1C2C5B;", disabled = TRUE)
+  }
+    
+  if(val$tab[26] == 1){
+    for(j in 2:25){
+      if(j %in% nums){
+        updateButton(session,paste("tab",j,sep = ""), style = "color: white;
+                   background-color: #1C2C5B;", disabled = TRUE)
+      }
     }
   }
+  for (i in 2:25){
+    if (val$tab[i] == 1){
+      updateButton(session,paste("tab",i,sep = ""), style = "color: white;
+                   background-color: #1C2C5B;", disabled = TRUE)
+    }
+  }
+  #for tip values
+  if (val$tab[26] == 1){
+    for(k in 2:25){
+      if(k %in% nums){
+        newVal = runif(1, 20.0, 23.0)
+        newVal = round(newVal,2)
+        updateNumericInput(session,paste("tabtip",k,sep = ""),value = newVal)
+      }
+    }
+  }
+  if (val$tab[26] == 1){
+    for(l in 2:25){
+      if(l %in% nums == FALSE){
+        newVal = runif(1, 18.0, 20.0)
+        newVal = round(newVal,2)
+        updateNumericInput(session,paste("tabtip",l,sep = ""),value = newVal)
+      }
+    }
+  }
+  
 }))
+
+#Reactive for the n1 and n2
+n1 <- reactive({
+  sum1 = 0
+  for(i in 2:25){
+    if(val$tab[i]==1){
+      sum1 = sum1 + 1
+    }
+  }
+  return(sum1)
+})
+output$n1text <-renderText({
+  sum1 = n1()
+  paste("n1 = ", sum1 )
+})
+
+output$n2text <-renderText({
+  sum1 = n1()
+  sum2 = 24 -sum1
+  paste("n2 = ", sum2 )
+})
+
+
 
 output$values <- renderText({
   es1 <- es()
-  n2 <- n1()
+  n2 <- n12()
   sigma1 = 4
   sigma2 = 4
   se1 = sqrt(((sigma1^2)/n2)+((sigma2^2)/n2))

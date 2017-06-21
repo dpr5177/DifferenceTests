@@ -4,6 +4,12 @@ library(shiny)
 library(shinyBS)
 
 jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
+#disable actionButton function
+disableActionButton <- function(id,session) {
+  session$sendCustomMessage(type="jsCode",
+                            list(code= paste("$('#",id,"').prop('disabled',true)"
+                                             ,sep="")))
+}
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -161,7 +167,14 @@ observeEvent(val$tab,({
       }
     }
   }
-
+  
+  #disable from clicking more if they did random
+  if(val$tab[26] == 1){
+    for (q in 2:25){
+      disableActionButton(paste("tab",q,sep = ""),session)
+    }
+  }
+  
   #for tip values
   if (val$tab[26] == 1){
     for(k in 2:25){

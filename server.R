@@ -237,7 +237,7 @@ output$n2text <-renderText({
   paste("n2 = ", sum2 )
 })
 
-
+#Text output for the average values
 output$avg1 <-renderText({
   sum1 = n1()
   #average = val3$calc1
@@ -257,8 +257,10 @@ output$avg1 <-renderText({
   average2 = average2/sum2
   average1 = average1/sum1
   #paste("The average is ", average, "and a the value of the 24th is ", val$tabtip[25], "and the sum I am getting is ", val3$calc1, "The another value is ", val$tab[10])
-  paste("The average for the candy tables is  ", round(average1,3),"The average for the non candy table is", round(average2,3) )
+  paste("The average for the candy tables is  ", round(average1,3),"The average for the no-candy table is", round(average2,3) )
 })
+
+#Text output for the effect
 output$effect <-renderText({
   sum1 = n1()
   #average = val3$calc1
@@ -278,8 +280,10 @@ output$effect <-renderText({
   average2 = average2/sum2
   average1 = average1/sum1
   diff1 = average1 -average2
-  paste("The effect is", diff1)
+  paste("The effect is", round(diff1,3))
 })
+
+#Text output for the standard error and the z value and p-value
 output$z <-renderText({
   sum1 = n1()
   #average = val3$calc1
@@ -320,10 +324,36 @@ output$z <-renderText({
   }
   sigma2 = sigma2/sum2
   
+  #THe poooled standard deviation
+  sigma3 = 0
+  average3 = 0
+  for(m in 2:25){
+    average3 = average3 + val$tabtip[m]
+  }
+  average3 = average3/24
+  for(u in 2:25){
+    newestVal3 = val$tabtip[u] - average3
+    newestVal3 = abs(newestVal3)
+    sigma3 = sigma3 + newestVal3
+  }
+  sigma3 = sigma3/24
+  
+  #DF = (s12/n1 + s22/n2)2 / { [ (s12 / n1)2 / (n1 - 1) ] + [ (s22 / n2)2 / (n2 - 1) ] } 
+  #DF = (sigma1^2 /sum1 + sigma2^2 / sum2)^2 / (((sigma1^2/sum1)^2/(sum1-1) +(sigma2^2/sum2)^2/(sum2-1)))
+  DF = 22
+  
+  
   se1 = sqrt(((sigma1^2)/sum1)+((sigma2^2)/sum2))
   z = diff1/se1
+  
+  se2 = sigma3*sqrt((1/sum1)+(1/sum2))
+  
+  #t = [ (x1 - x2) - d ] / SE 
+  t1 = diff1 / se2
+  pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  
   pvalue = 2*pnorm(z,lower.tail = FALSE)
-  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", pvalue)
+  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", round(pvalue,3), "and the DF is ", round(DF,4), "and the actual pvalue is", round(pvalue2,3), "and the pooled SD is ", sigma3 )
 })
 
 output$values <- renderText({

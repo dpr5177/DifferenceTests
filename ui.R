@@ -46,7 +46,7 @@ dashboardPage(skin="blue",
                                 br(),br(),
                                 "Individually select or randomly assign which tables you would like the waiter to give candy and what percent the waiter will receive as a tip.",br(),
                                 bsButton("tab26",label = "Randomly Assign"),br(),
-                                actionButton(inputId = "more","Generate more"),br(),
+                                actionButton(inputId = "more","Generate new"),br(),
                                 textOutput("n1text"),
                                 textOutput("n2text"),
                                 numericInput(inputId = "tabtip27","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
@@ -149,7 +149,7 @@ dashboardPage(skin="blue",
                                          conditionalPanel("input.showHyp == true",
                                                           "H0: giving a mint does not affect the tip percentage (No candy tip = Candy tip)",
                                                           br(),br(),
-                                                          "H1: giving a mint does affect the tip percentage (No candy tip not equal to Candy tip)"
+                                                          "H1: giving a mint does affect the tip percentage (No candy tip < Candy tip)"
                                          )
                                          ),
                                   column(4,

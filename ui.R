@@ -49,8 +49,8 @@ dashboardPage(skin="blue",
                                 actionButton(inputId = "more","Generate more"),br(),
                                 textOutput("n1text"),
                                 textOutput("n2text"),
-                                numericInput(inputId = "tip1","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
-                                numericInput(inputId = "tip2","Enter the average tip % for the tip with candy", value = 20, step = 0.5),
+                                numericInput(inputId = "tabtip27","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
+                                numericInput(inputId = "tabtip28","Enter the average tip % for the tip with candy", value = 20, step = 0.5),
                                 useShinyjs(),
                                 extendShinyjs(text = jsResetCode),
                                 #Use jscode to disable all the buttons
@@ -69,6 +69,7 @@ dashboardPage(skin="blue",
                                   column(3,
                                          bsButton("tab2",label = tags$img(src = 'restTable.png',width = 45)),
                                          numericInput(inputId = "tabtip2",label = NULL, val = 20, width = '72px',step = 0.5),
+                                         
                                          bsButton("tab3",label = tags$img(src = 'restTable.png',width = 45)),
                                          numericInput(inputId = "tabtip3",label = NULL, val = 20, width = '72px',step = 0.5),
                                          
@@ -154,11 +155,12 @@ dashboardPage(skin="blue",
                                   column(4,
                                          checkboxInput(inputId = "showTest", "Show the test values"),
                                          conditionalPanel("input.showTest == true",
-                                                          "words"
+                                                          textOutput("avg1"),br(),br(),
+                                                          textOutput("effect")
                                          )
                                          ),
                                   column(4,
-                                         ""
+                                         checkboxInput(inputId = "showPlot", "Show the plot")
                                          )
                                   
                                 )

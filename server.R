@@ -93,6 +93,9 @@ observe({
   val$tabtip[23] = input$tabtip23
   val$tabtip[24] = input$tabtip24
   val$tabtip[25] = input$tabtip25
+  #extra two for other things
+  val$tabtip[27] = input$tabtip27
+  val$tabtip[28] = input$tabtip28
 })
 #Part of the other way
 val <- reactiveValues(tab = c())
@@ -121,11 +124,15 @@ observe({
   val$tab[23] = input$tab23
   val$tab[24] = input$tab24
   val$tab[25] = input$tab25
+  
+  #extra 3 for other stuff
   val$tab[26] = input$tab26
+  # val$tab[27] = 0
+  # val$tab[28] = 0
 })
 #for the n's
 val2 <- reactiveValues(sum3 = 0 )
-
+val3 <- reactiveValues(calc1 = 0)
 # observeEvent(val$tab,({
 #   ra = random()
 #   nums = sample(2:25, 12)
@@ -139,10 +146,11 @@ val2 <- reactiveValues(sum3 = 0 )
 # }))
 observeEvent(input$reset_button, {js$reset()}) 
 
-#The other way of chaning the color
+#The other way of changing the color
 
 #Adding the part for random assignment
 observeEvent(val$tab,({
+  average = 0
   ra = random()
   nums = sample(2:25, 12)
   if (val$tab[26] == 1){
@@ -159,7 +167,7 @@ observeEvent(val$tab,({
       }
     }
   }
-  else{
+  else {
     for (i in 2:25){
       if (val$tab[i] == 1){
         updateButton(session,paste("tab",i,sep = ""), style = "color: white;
@@ -168,6 +176,12 @@ observeEvent(val$tab,({
     }
   }
   
+  #to calc avg1
+  for(t in 2:25){
+    if(t %in% nums){
+      val3$calc1 = val3$calc1 + val$tabtip[t]
+    }
+  }
   #disable from clicking more if they did random
   if(val$tab[26] == 1){
     for (q in 2:25){
@@ -224,7 +238,73 @@ output$n2text <-renderText({
 })
 
 
-
+output$avg1 <-renderText({
+  sum1 = n1()
+  #average = val3$calc1
+  average1 = 0
+  for(g in 2:25){
+    if(val$tab[g]==1){
+      average1 = average1 + val$tabtip[g]
+    }
+  }
+  average2 = 0
+  for(g in 2:25){
+    if(val$tab[g]==0){
+      average2 = average2 + val$tabtip[g]
+    }
+  }
+  sum2 = 24-sum1
+  average2 = average2/sum2
+  average1 = average1/sum1
+  #paste("The average is ", average, "and a the value of the 24th is ", val$tabtip[25], "and the sum I am getting is ", val3$calc1, "The another value is ", val$tab[10])
+  paste("The average for the candy tables is  ", average1,"The average for the non candy table is", average2 )
+})
+output$effect <-renderText({
+  sum1 = n1()
+  #average = val3$calc1
+  average1 = 0
+  for(g in 2:25){
+    if(val$tab[g]==1){
+      average1 = average1 + val$tabtip[g]
+    }
+  }
+  average2 = 0
+  for(g in 2:25){
+    if(val$tab[g]==0){
+      average2 = average2 + val$tabtip[g]
+    }
+  }
+  sum2 = 24-sum1
+  average2 = average2/sum2
+  average1 = average1/sum1
+  diff1 = average1 -average2
+  paste("The effect is", diff1)
+})
+output$z <-renderText({
+  sum1 = n1()
+  #average = val3$calc1
+  average1 = 0
+  for(g in 2:25){
+    if(val$tab[g]==1){
+      average1 = average1 + val$tabtip[g]
+    }
+  }
+  average2 = 0
+  for(g in 2:25){
+    if(val$tab[g]==0){
+      average2 = average2 + val$tabtip[g]
+    }
+  }
+  sum2 = 24-sum1
+  average2 = average2/sum2
+  average1 = average1/sum1
+  diff1 = average1 -average2
+  
+  se1 = sqrt(((sigma1^2)/sum1)+((sigma2^2)/sum2))
+  z = diff1/se1
+  
+  paste("The z value is ", z)
+})
 
 output$values <- renderText({
   es1 <- es()

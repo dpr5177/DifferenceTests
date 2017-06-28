@@ -1,4 +1,5 @@
 #Difference Tests
+#Waiter Experiment
 library(shinyjs)
 library(shiny)
 library(shinyBS)
@@ -93,10 +94,18 @@ observe({
   val$tabtip[23] = input$tabtip23
   val$tabtip[24] = input$tabtip24
   val$tabtip[25] = input$tabtip25
+  
   #extra two for other things
-  val$tabtip[27] = input$tabtip27
-  val$tabtip[28] = input$tabtip28
 })
+
+nocantip <- reactive({
+  return(input$tabtip27)
+})
+
+cantip <- reactive({
+  return(input$tabtip28)
+})
+
 #Part of the other way
 val <- reactiveValues(tab = c())
 observe({
@@ -147,12 +156,16 @@ val3 <- reactiveValues(calc1 = 0)
 observeEvent(input$reset_button, {js$reset()}) 
 
 #The other way of changing the color
+val4 <- reactiveValues(nums1 = 0 )
+observeEvent(input$tab26,({
+  val4$nums1 = sample(2:25, 12)
+}))
 
 #Adding the part for random assignment
 observeEvent(val$tab,({
   average = 0
   ra = random()
-  nums = sample(2:25, 12)
+  nums = val4$nums1
   if (val$tab[26] == 1){
     updateButton(session,paste("tab",26,sep = ""), style = "color: white;
                    background-color: #1C2C5B;", disabled = TRUE)
@@ -184,10 +197,13 @@ observeEvent(val$tab,({
   
   
   #for tip values
+  tip1 = cantip()
+  tip2 = nocantip()
   if (val$tab[26] == 1){
     for(k in 2:25){
       if(k %in% nums){
-        newVal = runif(1, 20.0, 23.0)
+        newVal = rnorm(1, mean = tip1, sd = 2.8)
+        #newVal = runif(1, 20.0, 23.0)
         newVal = round(newVal,2)
         updateNumericInput(session,paste("tabtip",k,sep = ""),value = newVal)
       }
@@ -196,17 +212,41 @@ observeEvent(val$tab,({
   if (val$tab[26] == 1){
     for(l in 2:25){
       if(l %in% nums == FALSE){
-        newVal = runif(1, 18.0, 20.0)
+        #newVal = runif(1, 18.0, 20.0)
+        newVal = rnorm(1, mean = tip2, sd = 2.8)
         newVal = round(newVal,2)
         updateNumericInput(session,paste("tabtip",l,sep = ""),value = newVal)
       }
     }
   }
   
-  #to calc avg1
-  for(t in 2:25){
-    if(t %in% nums){
-      val3$calc1 = val3$calc1 + val$tabtip[t]
+}))
+
+observeEvent(input$tabtip28,({
+  nums = val4$nums1
+  tip1 = cantip()
+  if (val$tab[26] == 1){
+    for(k in 2:25){
+      if(k %in% nums){
+        newVal = rnorm(1, mean = tip1, sd = 2.8)
+        #newVal = runif(1, 20.0, 23.0)
+        newVal = round(newVal,2)
+        updateNumericInput(session,paste("tabtip",k,sep = ""),value = newVal)
+      }
+    }
+  }
+}))
+observeEvent(input$tabtip27,({
+  tip2 = nocantip()
+  nums = val4$nums1
+  if (val$tab[26] == 1){
+    for(l in 2:25){
+      if(l %in% nums == FALSE){
+        #newVal = runif(1, 18.0, 20.0)
+        newVal = rnorm(1, mean =tip2, sd = 2.8)
+        newVal = round(newVal,2)
+        updateNumericInput(session,paste("tabtip",l,sep = ""),value = newVal)
+      }
     }
   }
   
@@ -241,16 +281,16 @@ output$n2text <-renderText({
 #Text output for the average values
 output$avg1 <-renderText({
   sum1 = n1()
-  average1 = val3$calc1
-  #average1 = 0
-  # for(g in 2:25){
-  #   if(val$tab[g]==1){
-  #     average1 = average1 + val$tabtip[g]
-  #   }
-  # }
+  nums = val4$nums1
+  average1 = 0
   average2 = 0
+  for(k in 2:25){
+    if(k %in% nums){
+      average1 = average1 + val$tabtip[k]
+    }
+  }
   for(g in 2:25){
-    if(val$tab[g]==0){
+    if(g %in% nums ==FALSE){
       average2 = average2 + val$tabtip[g]
     }
   }
@@ -264,16 +304,16 @@ output$avg1 <-renderText({
 #Text output for the effect
 output$effect <-renderText({
   sum1 = n1()
-  #average = val3$calc1
+  nums = val4$nums1
   average1 = 0
-  for(g in 2:25){
-    if(val$tab[g]==1){
-      average1 = average1 + val$tabtip[g]
+  average2 = 0
+  for(k in 2:25){
+    if(k %in% nums){
+      average1 = average1 + val$tabtip[k]
     }
   }
-  average2 = 0
   for(g in 2:25){
-    if(val$tab[g]==0){
+    if(g %in% nums ==FALSE){
       average2 = average2 + val$tabtip[g]
     }
   }
@@ -287,17 +327,17 @@ output$effect <-renderText({
 #Text output for the standard error and the z value and p-value
 output$z <-renderText({
   sum1 = n1()
-  #average = val3$calc1
+  nums = val4$nums1
   average1 = 0
-  for(g in 2:25){
-    if(val$tab[g]==1){
-      average1 = average1 + val$tabtip[g]
+  average2 = 0
+  for(k in 2:25){
+    if(k %in% nums){
+      average1 = average1 + val$tabtip[k]
     }
   }
-  average2 = 0
-  for(f in 2:25){
-    if(val$tab[f]==0){
-      average2 = average2 + val$tabtip[f]
+  for(g in 2:25){
+    if(g %in% nums ==FALSE){
+      average2 = average2 + val$tabtip[g]
     }
   }
   sum2 = 24-sum1
@@ -345,16 +385,21 @@ output$z <-renderText({
   
   
   se1 = sqrt(((sigma1^2)/sum1)+((sigma2^2)/sum2))
-  z = diff1/se1
   
   se2 = sigma3*sqrt((1/sum1)+(1/sum2))
+  
+  z = diff1/se2
   
   #t = [ (x1 - x2) - d ] / SE 
   t1 = diff1 / se2
   pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  sum100 = 0
+  for(o in 2:25){
+    sum100 = sum100 + val$tabtip[o]
+  }
   
   pvalue = 2*pnorm(z,lower.tail = FALSE)
-  paste("The standard error is",round(se1,3), "The z value is ", round(z,2), "and the p-value is ", round(pvalue,3), "and the DF is ", round(DF,4), "and the actual pvalue is", round(pvalue2,3), "and the pooled SD is ", round(sigma3,3) )
+  paste("The standard error is",round(se2,3), "The z value is ", round(z,2), "and the p-value is ", round(pvalue,3) )
 })
 
 output$values <- renderText({
@@ -370,5 +415,282 @@ output$values <- renderText({
   
   paste("The p-value of the test is ", round(pval,4))
 })
+
+nForOp1 <- reactive({
+  sample(10:20, 1)
+})
+
+effectForOp1 <- reactive({
+  runif(1, 0.5,1.5 )
+})
+
+opt1 <- reactiveValues(sim1 = 0)
+observe({
   
+  #first one is n
+  n10 = nForOp1()
+  
+  #second one is the effect size
+  effectSize = effectForOp1()
+  
+  
+  sigma3 = 3.5
+  
+  sum5 = n10 / 2
+  
+  se2 = sigma3*sqrt((1/sum5)+(1/sum5))
+  
+  DF = n10 - 2
+  t1 = effectSize  / se2
+  pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  
+  #third one is the p value
+  opt1$sim1 = pvalue2
+    
+})
+
+output$option1 <- renderTable({
+  
+  n1 = nForOp1()
+  efs1 = effectForOp1()
+  
+  ctable = matrix(c(n1,efs1),nrow=1)
+  colnames(ctable) = c("n","effect size")
+  ctable
+})
+  
+output$option1pval <-renderText({
+  pvalue1 = opt1$sim1
+  paste("pvalue = ", round(pvalue1,4))
+})
+
+nForOp2 <- reactive({
+  sample(30:40, 1)
+})
+
+effectForOp2 <- reactive({
+  runif(1, 0.5,1.5 )
+})
+
+opt2 <- reactiveValues(sim2 = 0)
+observe({
+  
+  #first one is n
+  n10 = nForOp2()
+  
+  #second one is the effect size
+  effectSize = effectForOp1()
+  
+  
+  sigma3 = 3.5
+  
+  sum5 = n10 / 2
+  
+  se2 = sigma3*sqrt((1/sum5)+(1/sum5))
+  
+  DF = n10 - 2
+  t1 = effectSize  / se2
+  pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  
+  #third one is the p value
+  opt2$sim2 = pvalue2
+  
+})
+
+output$option2 <- renderTable({
+  
+  n2 = nForOp2()
+  efs2 = effectForOp1()
+  
+  ctable = matrix(c(n2,efs2),nrow=1)
+  colnames(ctable) = c("n","effect size")
+  ctable
+})
+
+output$option2pval <-renderText({
+  pvalue2 = opt2$sim2
+  paste("pvalue = ", round(pvalue2,4))
+})
+
+nForOp3 <- reactive({
+  sample(400:500, 1)
+})
+
+effectForOp3 <- reactive({
+  runif(1, 1.6,2.4)
+})
+
+opt3 <- reactiveValues(sim3 = 0)
+observe({
+  
+  #first one is n
+  n10 = nForOp2()
+  
+  #second one is the effect size
+  effectSize = effectForOp3()
+  
+  
+  sigma3 = 3.5
+  
+  sum5 = n10 / 2
+  
+  se2 = sigma3*sqrt((1/sum5)+(1/sum5))
+  
+  DF = n10 - 2
+  t1 = effectSize  / se2
+  pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  
+  #third one is the p value
+  opt3$sim3 = pvalue2
+  
+})
+
+output$option3 <- renderTable({
+  
+  n3 = nForOp2()
+  efs3 = effectForOp3()
+  
+  ctable = matrix(c(n3,efs3),nrow=1)
+  colnames(ctable) = c("n","effect size")
+  ctable
+})
+
+output$option3pval <-renderText({
+  pvalue3 = opt3$sim3
+  paste("pvalue = ", round(pvalue3,4))
+})
+
+nForOp4 <- reactive({
+  sample(400:500, 1)
+})
+
+effectForOp4 <- reactive({
+  runif(1, 0.01,0.1)
+})
+
+opt4 <- reactiveValues(sim4 = 0)
+observe({
+  
+  #first one is n
+  n10 = nForOp2()
+  
+  #second one is the effect size
+  effectSize = effectForOp4()
+  
+  
+  sigma3 = 3.5
+  
+  sum5 = n10 / 2
+  
+  se2 = sigma3*sqrt((1/sum5)+(1/sum5))
+  
+  DF = n10 - 2
+  t1 = effectSize  / se2
+  pvalue2 = pt(t1,DF,lower.tail = FALSE)
+  
+  #third one is the p value
+  opt4$sim4 = pvalue2
+  
+})
+
+output$option4 <- renderTable({
+  
+  n4 = nForOp2()
+  efs4 = effectForOp4()
+  
+  ctable = matrix(c(n4,efs4),nrow=1)
+  colnames(ctable) = c("n","effect size")
+  ctable
+})
+
+output$option4pval <-renderText({
+  pvalue4 = opt4$sim4
+  paste("pvalue = ", round(pvalue4,4))
+})
+
+#for ordering the question
+order <- reactive({
+  nums11 = sample(1:4,4)
+})
+
+#two different ways of ordering it the if and if else are probably less efficient
+output$chooseA <- renderUI({
+  numbers1 = order()
+  if(numbers1[1] == 1){
+    tableOutput("option1")
+  }
+  else if(numbers1[1] == 2){
+    tableOutput("option2")
+  }
+  else if(numbers1[1] == 3){
+    tableOutput("option3")
+  }
+  else{
+    tableOutput("option4")
+  }
+})
+
+output$chooseB <- renderUI({
+  numbers1 = order()
+  tableOutput(paste("option",numbers1[2],sep = ""))
+})
+
+output$chooseC <- renderUI({
+  numbers1 = order()
+  tableOutput(paste("option",numbers1[3],sep = ""))
+})
+
+output$chooseD <- renderUI({
+  numbers1 = order()
+  tableOutput(paste("option",numbers1[4],sep = ""))
+})
+
+# observe({
+#   if (input$h == 1){
+#     observeEvent(input$di1,{
+#       if (input$di1 == "D"){
+#         output$out1 = renderText(
+#           paste("<span style= \" color: black\"> Correct! </span>"))
+#         
+#       }
+#       else{
+#         output$out1 = renderText(
+#           paste("<span style= \" color: red\"> False </span>"))
+#       }
+#     })
+#     observeEvent(input$di2,{
+#       if (input$di2 == "B"){
+#         output$out2 = renderText(
+#           paste("<span style= \" color: black\"> Correct! </span>"))
+#       }
+#       else{
+#         output$out2 = renderText(
+#           paste("<span style= \" color: red\"> False </span>"))
+#       }
+#     })
+#     observeEvent(input$di3,{
+#       if (input$di3 == "A"){
+#         output$out3 = renderText(
+#           paste("<span style= \" color: black\"> Correct! </span>"))
+#       }
+#       else{
+#         output$out3 = renderText(
+#           paste("<span style= \" color: red\"> False </span>"))
+#       }
+#     })   
+#     observeEvent(input$di4,{
+#       if (input$di4 == "C"){
+#         output$out4 = renderText(
+#           paste("<span style= \" color: black\"> Correct! </span>"))
+#       }
+#       else{
+#         output$out4 = renderText(
+#           paste("<span style= \" color: red\"> False </span>"))
+#       }
+#     })
+#     output$answer1 = renderText(
+#       paste("The correct answers of Level 1: D B A C"))
+#   }
+# })
+
 })

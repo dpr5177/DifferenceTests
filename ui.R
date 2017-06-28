@@ -1,4 +1,7 @@
 #Difference Tests
+#Waiter Experiment
+#http://onlinelibrary.wiley.com/doi/10.1111/j.1559-1816.2002.tb00216.x/abstract
+
 library(shiny)
 library(shinydashboard)
 library(shinyBS)
@@ -17,8 +20,9 @@ dashboardPage(skin="blue",
                 sidebarMenu(
                   
                   #menuItem("Overview", tabName = "over", icon = icon("university")),
-                  menuItem("Part 1", tabName = "second", icon = icon("pencil-square")),
-                  menuItem("Part 2", tabName = "third", icon = icon("pencil-square"))
+                  menuItem("Part 1", tabName = "first", icon = icon("pencil-square")),
+                  menuItem("Part 2", tabName = "second", icon = icon("pencil-square")),
+                  menuItem("Part 3", tabName = "third", icon = icon("pencil-square"))
                 )),
               
               #Content within the tabs
@@ -36,7 +40,7 @@ dashboardPage(skin="blue",
                             )
                           )
                   ),
-                  tabItem(tabName = "second",
+                  tabItem(tabName = "first",
                           fluidPage(
                             sidebarLayout(
                               sidebarPanel(
@@ -44,11 +48,11 @@ dashboardPage(skin="blue",
                                 br(),br(),
                                 "See if you can replicate this experiment",
                                 br(),br(),
-                                "Individually select or randomly assign which tables you would like the waiter to give candy and what percent the waiter will receive as a tip.",br(),
+                                "Randomly assign which tables you would like the waiter to give candy and what percent the waiter will receive as a tip.",br(),
                                 bsButton("tab26",label = "Randomly Assign"),br(),
-                                actionButton(inputId = "more","Generate new"),br(),
-                                textOutput("n1text"),
-                                textOutput("n2text"),
+                                # actionButton(inputId = "more","Generate new"),br(),
+                                # textOutput("n1text"),
+                                # textOutput("n2text"),
                                 numericInput(inputId = "tabtip27","Enter the average tip % for the no candy tip", value = 20, step = 0.5),
                                 numericInput(inputId = "tabtip28","Enter the average tip % for the tip with candy", value = 20, step = 0.5),
                                 uiOutput("table1"),
@@ -172,7 +176,7 @@ dashboardPage(skin="blue",
                           )
                   ),
                   
-                  # tabItem(tabName = "second",
+                  # tabItem(tabName = "noname",
                   #         fluidRow(
                   #           withMathJax(),
                   #           column(6,
@@ -200,7 +204,7 @@ dashboardPage(skin="blue",
                   #                  )
                   #         )
                   # ),
-                  tabItem(tabName = "third",
+                  tabItem(tabName = "second",
                           fluidRow(
                             withMathJax(),
                             column(6,
@@ -228,6 +232,81 @@ dashboardPage(skin="blue",
                             )
                             )
                           
+                          ),
+                  tabItem(tabName = "third",
+                          fluidRow(
+                            column(3,""),
+                            column(6,
+                                   h1("Test your understanding"),br()
+                                   )
+                          ),
+                          fluidRow(
+                            column(6,
+                                   uiOutput("chooseA"),
+                                   div(dragUI("div1","A", style = "background-color:orange", 
+                                              class = "dragelement"), style = "margin-left:-70%"),
+                                   br()
+                                   ),
+                            column(6,
+                                   textOutput("option1pval"),
+                                   tags$head(tags$style("#option1pval{color: black;font-size: 30px;font-style: bold;}")),
+                                   dropUI("di1", row_n = 1, col_n = 1,style = "background-color:lightgrey")
+                                   )
+                            
+                          ),
+                          fluidRow(
+                            column(6,
+                                   uiOutput("chooseB"),
+                                   div(dragUI("div2","B", style = "background-color:orange", 
+                                              class = "dragelement"), style = "margin-left:-70%"),
+                                   br()
+                            ),
+                            column(6,
+                                   textOutput("option2pval"),
+                                   tags$head(tags$style("#option2pval{color: black;font-size: 30px;font-style: bold;}")),
+                                   dropUI("di2", row_n = 1, col_n = 1,style = "background-color:lightgrey")
+                            )
+                            
+                          ),
+                          fluidRow(
+                            column(6,
+                                   uiOutput("chooseC"),
+                                   div(dragUI("div3","C", style = "background-color:orange", 
+                                              class = "dragelement"), style = "margin-left:-70%"),
+                                   br()
+                            ),
+                            column(6,
+                                   textOutput("option3pval"),
+                                   tags$head(tags$style("#option3pval{color: black;font-size: 30px;font-style: bold;}")),
+                                   dropUI("di3", row_n = 1, col_n = 1,style = "background-color:lightgrey")
+                            )
+                            
+                          ),
+                          fluidRow(
+                            column(6,
+                                   uiOutput("chooseD"),
+                                   div(dragUI("div4","D", style = "background-color:orange", 
+                                              class = "dragelement"), style = "margin-left:-70%"),
+                                   br()
+                            ),
+                            column(6,
+                                   textOutput("option4pval"),
+                                   tags$head(tags$style("#option4pval{color: black;font-size: 30px;font-style: bold;}")),
+                                   dropUI("di4", row_n = 1, col_n = 1,style = "background-color:lightgrey")
+                            )
+                            
+                          ),
+                          fluidRow(
+                            column(4, 
+                                   ""
+                                   ),
+                            column(4,br(),br(),
+                                   actionButton(inputId = "submit", label = "Submit Answers")
+                                   ),
+                            column(4,
+                                   ""
+                                   )
+                          )
                           )
                   
                   )
